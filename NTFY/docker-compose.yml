@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  ntfy:
+    hostname: ntfy.valtersit.com
+    image: binwiederhier/ntfy
+    container_name: ntfy.valtersit.com
+    command:
+      - serve
+    environment:
+      - TZ=UTC
+      - VIRTUAL_HOST=ntfy.valtersit.com
+      - LETSENCRYPT_EMAIL=myssl@valtersit.eu
+      - LETSENCRYPT_HOST=ntfy.valtersit.com
+      - NTFY_BASE_URL=https://ntfy.valtersit.com
+      - NTFY_AUTH_DEFAULT_ACCESS=deny-all
+      - NTFY_BEHIND_PROXY=true
+      - NTFY_ENABLE_LOGIN=true
+    volumes:
+      - /srv/docker/ntfy/cache:/var/cache/ntfy
+      - /srv/docker/ntfy/config:/etc/ntfy
+      - /srv/docker/ntfy/lib/:/var/lib/ntfy/
+    ports:
+      - 838:80
+      - 438:443
+    networks:
+      valtersit:
+    restart: unless-stopped
+networks:
+  valtersit:
+    external: true
